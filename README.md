@@ -64,7 +64,44 @@ python -m cameras view camera1              # one camera
 python -m cameras snapshot camera1 pic.jpg  # save one frame
 ```
 
-## 5. Other languages
+## 5. Web apps (React etc.)
+
+Browsers can't play `rtsp://` streams, and the camera password must never be in frontend code. So one PC on the camera network runs a small **relay** (MediaMTX). The relay reads the cameras and serves them in a format browsers can play.
+
+**On the relay PC (once):**
+
+1. Clone this repo and do steps 1 and 2 above.
+2. Download `mediamtx_..._windows_amd64.zip` from https://github.com/bluenviron/mediamtx/releases and unzip it into `relay/mediamtx/`.
+3. Check the video codec: `python -m cameras info camera1`
+4. Start the relay:
+   ```
+   python -m cameras relay              # if info said H.264
+   python -m cameras relay --transcode  # otherwise (needs ffmpeg: winget install ffmpeg)
+   ```
+   Allow it through the Windows firewall when asked. It uses TCP ports 8889 and 8888 and UDP port 8189.
+
+Each camera is now available, with no password, at:
+
+| What                     | URL                                         |
+|--------------------------|---------------------------------------------|
+| Web page (WebRTC, ~0.5s delay) | `http://<relay-pc>:8889/camera1`      |
+| HLS (for `<video>` + hls.js)   | `http://<relay-pc>:8888/camera1/index.m3u8` |
+| RTSP (no password)             | `rtsp://<relay-pc>:8554/camera1`      |
+
+Open the first URL in a browser to test it.
+
+**In React:** copy [`web/CameraStream.jsx`](web/CameraStream.jsx) into your app and set `RELAY_URL` to the relay PC:
+
+```jsx
+import { CameraStream, CameraGrid } from "./CameraStream";
+
+<CameraStream name="camera1" />   // one camera
+<CameraGrid />                    // all four in a 2x2 grid
+```
+
+The relay connects to a camera only while someone is watching it. However many people are watching, each camera gets only one connection.
+
+## 6. Other languages
 
 Every camera URL has this form:
 
@@ -97,4 +134,4 @@ ffplay -rtsp_transport tcp rtsp://root:<password>@192.168.50.91:554/mpeg4/media.
 
 ## Note
 
-Each camera can only serve a few viewers at the same time. Close streams (`cap.release()`) when you are done. If too many people need the streams at once, a relay server such as MediaMTX can be added later. The way you use this library would stay the same.
+Each camera can only serve a few viewers at the same time. Close streams (`cap.release()`) when you are done. If many people or apps need the streams at once, have everyone use the relay URLs (section 5) instead of connecting to the cameras directly.

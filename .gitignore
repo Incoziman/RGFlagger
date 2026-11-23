@@ -5,3 +5,5 @@ build/
 dist/
 .venv/
 *.jpg
+relay/mediamtx/
+relay/mediamtx.yml
