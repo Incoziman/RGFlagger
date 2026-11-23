@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cameras"
+version = "0.1.0"
+description = "Easy access to the office IP camera streams"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["opencv-python"]
+
+[tool.setuptools]
+packages = ["cameras"]
+
+[tool.setuptools.package-data]
+cameras = ["cameras.json"]
