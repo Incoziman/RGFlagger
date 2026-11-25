@@ -4,6 +4,6 @@ __pycache__/
 build/
 dist/
 .venv/
+.pytest_cache/
 *.jpg
-relay/mediamtx/
-relay/mediamtx.yml
+logs/

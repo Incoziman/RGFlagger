@@ -4,14 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cameras"
-version = "0.1.0"
-description = "Easy access to the office IP camera streams"
+version = "0.2.0"
+description = "Watch network switch port LEDs through IP cameras and alert on red/amber or dark ports"
 readme = "README.md"
 requires-python = ">=3.8"
-dependencies = ["opencv-python"]
+dependencies = ["opencv-python", "numpy"]
+
+[project.optional-dependencies]
+test = ["pytest"]
 
 [tool.setuptools]
 packages = ["cameras"]
 
 [tool.setuptools.package-data]
-cameras = ["cameras.json"]
+cameras = ["cameras.json", "leds.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

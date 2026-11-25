@@ -1,0 +1,28 @@
+{
+  "webcam": {
+    "leds": [
+      {
+        "name": "left",
+        "box": [
+          313,
+          5,
+          287,
+          337
+        ],
+        "mode": "any",
+        "baseline": "RED"
+      },
+      {
+        "name": "right",
+        "box": [
+          1,
+          2,
+          311,
+          336
+        ],
+        "mode": "any",
+        "baseline": "OTHER"
+      }
+    ]
+  }
+}
